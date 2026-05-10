@@ -11,36 +11,95 @@ IPD Emcad — 脚本执行代理。agent 跑在本地执行机上，远程通过
 
 ## 启动
 
-本地手动启动 agent：
+### 本地执行机 — 启动 agent
+
+**方式一：源码启动**
 
 ```bash
-cd server && pip install -e .         # 安装，注册 ipd-emcad-agent
-ipd-emcad-agent --host 0.0.0.0 --port 9527   # 手动启动
+cd server && pip install -e .
+ipd-emcad-agent --host 0.0.0.0 --port 9527
 ```
 
-远程安装 CLI 后调用：
+**方式二：打包后启动**
+
+Mac:
+```bash
+cd server/dist/ipd-emcad-agent
+./ipd-emcad-agent --host 0.0.0.0 --port 9527
+```
+
+Windows:
+```batch
+cd server\dist\ipd-emcad-agent
+ipd-emcad-agent.exe --host 0.0.0.0 --port 9527
+```
+
+agent 启动后监听 `http://0.0.0.0:9527`，暴露 `/health`、`/status`、`/execute` 三个端点。
+
+### 远程调用方 — 安装 CLI
 
 ```bash
-cd client && npm run build && npm link  # 注册 ipd-emcad-cli
-ipd-emcad-cli config set proxy_host <本地IP>
-ipd-emcad-cli script run <script> --arg ... --env KEY=VAL ...
+cd client && npm run build && npm link  # 全局注册 ipd-emcad-cli
+```
+
+使用前配置指向本地执行机：
+
+```bash
+ipd-emcad-cli config set proxy_host <执行机IP>
+ipd-emcad-cli config set proxy_port 9527
 ```
 
 ## Key Commands
 
 ```bash
-# 本地 — 手动启动 agent
+# 本地 — 启动 agent
 ipd-emcad-agent --host 0.0.0.0 --port 9527
 
-# 远程 — CLI 调用本地 agent
-ipd-emcad-cli config set proxy_host <本地IP>    # 指向本地 agent
-ipd-emcad-cli config set proxy_port 9527        # 端口
+# 远程 — CLI 调用
+ipd-emcad-cli config set proxy_host <执行机IP>
+ipd-emcad-cli config set proxy_port 9527
 ipd-emcad-cli script run <script> --arg ... --env KEY=VAL ...
 ipd-emcad-cli proxy status
 
 # 打包
-cd client && npm run build          # esbuild → dist/ipd-emcad-cli.cjs
-cd server && python build.py        # PyInstaller → dist/ipd-emcad-agent/
+cd client && npm run build                              # esbuild → dist/ipd-emcad-cli.cjs
+cd server && python build.py                            # Mac PyInstaller → dist/ipd-emcad-agent/
+cd server && build.bat                                  # Windows PyInstaller → dist/ipd-emcad-agent/
+```
+
+## 打包
+
+### Mac
+
+```bash
+cd server
+python build.py
+# 产物: dist/ipd-emcad-agent/ipd-emcad-agent (单目录，约 25MB)
+```
+
+### Windows
+
+在 Windows 机器上运行：
+
+```batch
+cd server
+build.bat
+:: 产物: dist\ipd-emcad-agent\ipd-emcad-agent.exe
+```
+
+> Windows 无法从 macOS 交叉编译，需在 Windows 环境或 CI 中构建。
+
+### server 打包说明
+
+- PyInstaller 将 Python 解释器 + 依赖 + 源码打包为独立目录 (`--onedir`)
+- `--add-data` 在 Mac 用 `:` 分隔，Windows 用 `;` 分隔（`build.py` 和 `build.bat` 各自处理）
+
+### client 打包
+
+```bash
+cd client && npm run build
+# esbuild 将 ESM 源码打包为 CJS → dist/ipd-emcad-cli.cjs
+# 入口: bin/ipd-emcad-cli.js → dist/ipd-emcad-cli.cjs
 ```
 
 ## Architecture
