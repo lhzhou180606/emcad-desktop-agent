@@ -6,16 +6,6 @@ import chalk from "chalk";
 const CONFIG_DIR = path.join(os.homedir(), ".ipd-emcad-cli");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
-const DEFAULTS = {
-  proxy_host: "0.0.0.0",
-  proxy_port: "9527",
-  server_url: "",
-  auth_token: "",
-  agent_id: "",
-  heartbeat_interval: "30",
-  pull_interval: "10",
-};
-
 function envOverride(key, value) {
   const envKey = `EMCAD_${key.toUpperCase()}`;
   const envVal = process.env[envKey];
@@ -23,13 +13,15 @@ function envOverride(key, value) {
 }
 
 export function getConfig() {
-  let cfg = { ...DEFAULTS };
+  let cfg = {};
   try {
     if (fs.existsSync(CONFIG_FILE)) {
-      const raw = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
-      cfg = { ...cfg, ...raw };
+      cfg = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
     }
   } catch {}
+  // 默认值
+  if (!cfg.proxy_host) cfg.proxy_host = "0.0.0.0";
+  if (!cfg.proxy_port) cfg.proxy_port = "9527";
   for (const key of Object.keys(cfg)) {
     cfg[key] = envOverride(key, cfg[key]);
   }
@@ -48,18 +40,12 @@ export function configShow() {
   const c = getConfig();
   console.log(`配置目录:    ${CONFIG_DIR}`);
   console.log(`代理地址:    ${c.proxy_host}:${c.proxy_port}`);
-  console.log(`服务端:      ${c.server_url || "(未配置)"}`);
-  console.log(`Agent ID:    ${c.agent_id || "(未注册)"}`);
-  console.log(`认证Token:   ${c.auth_token ? "***" : "(未配置)"}`);
-  console.log(`心跳间隔:    ${c.heartbeat_interval}s`);
-  console.log(`拉取间隔:    ${c.pull_interval}s`);
 }
 
 export function configSet(key, value) {
-  if (!value) {
+  if (!value && value !== "") {
     const c = getConfig();
-    const envKey = `EMCAD_${key.toUpperCase()}`;
-    console.log(`${key} = ${c[key] || process.env[envKey] || "(未设置)"}`);
+    console.log(`${key} = ${c[key] || "(未设置)"}`);
     return;
   }
   setConfig(key, value);

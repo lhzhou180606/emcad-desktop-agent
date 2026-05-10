@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { program } from "commander";
 import chalk from "chalk";
-import { proxyStart, proxyStop, proxyStatus, proxyRegister } from "./commands/proxy.js";
+import { proxyStart, proxyStop, proxyStatus } from "./commands/proxy.js";
 import { scriptRun, scriptList } from "./commands/script.js";
-import { configShow, configSet, getConfig } from "./commands/config.js";
+import { configShow, configSet } from "./commands/config.js";
 
 program
   .name("ipd-emcad-cli")
@@ -19,7 +19,6 @@ proxyCmd
   .description("启动本地代理服务")
   .option("--host <host>", "监听地址")
   .option("--port <port>", "监听端口")
-  .option("--server <url>", "远程服务端地址")
   .action(async (opts) => {
     await proxyStart(opts);
   });
@@ -38,19 +37,8 @@ proxyCmd
       console.log(chalk.yellow("代理未运行"));
       return;
     }
-    console.log(`代理 ID:     ${s.agent_id || "(未注册)"}`);
     console.log(`状态:        ${s.status}`);
-    console.log(`服务端:      ${s.server_url || "(未配置)"}`);
-    console.log(`任务拉取:    ${s.pull_enabled ? "开启" : "关闭"}`);
     console.log(`监听地址:    http://${s.proxy_host}:${s.proxy_port}`);
-  });
-
-proxyCmd
-  .command("register <serverUrl>")
-  .description("向远程服务端注册代理")
-  .option("--token <token>", "认证 Token")
-  .action(async (serverUrl, opts) => {
-    await proxyRegister(serverUrl, opts.token);
   });
 
 // ── script ───────────────────────────────────────────

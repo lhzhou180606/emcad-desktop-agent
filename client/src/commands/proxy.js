@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import chalk from "chalk";
 import { getConfig, setConfig } from "./config.js";
-import { healthCheck, getStatus, registerDirect } from "../api.js";
+import { healthCheck, getStatus } from "../api.js";
 
 const CFG_DIR = path.join(os.homedir(), ".ipd-emcad-cli");
 
@@ -31,8 +31,6 @@ export async function proxyStart(opts = {}) {
   const args = [];
   if (host) args.push("--host", host);
   if (port) args.push("--port", String(port));
-  if (opts.server) args.push("--server", opts.server);
-
   const child = spawn("ipd-emcad-agent", args, {
     detached: true,
     stdio: "ignore",
@@ -71,17 +69,3 @@ export async function proxyStatus() {
   }
 }
 
-export async function proxyRegister(serverUrl, token = "") {
-  try {
-    const result = await registerDirect(serverUrl, token);
-    if (result.error) {
-      console.log(chalk.red(`注册失败: ${result.error}`));
-    } else {
-      console.log(chalk.green(`注册成功: agent_id=${result.agent_id}`));
-    }
-  } catch {
-    setConfig("server_url", serverUrl);
-    if (token) setConfig("auth_token", token);
-    console.log(chalk.yellow(`服务端地址已设置: ${serverUrl} (代理未运行，下次启动时注册)`));
-  }
-}
