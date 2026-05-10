@@ -37,7 +37,6 @@ proxyCmd
       console.log(chalk.yellow("代理未运行"));
       return;
     }
-    console.log(`状态:        ${s.status}`);
     console.log(`监听地址:    http://${s.proxy_host}:${s.proxy_port}`);
   });
 
