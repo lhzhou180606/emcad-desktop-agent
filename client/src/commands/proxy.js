@@ -19,7 +19,15 @@ function _spawn(cmd, args, host, port, onNotFound) {
     started = true;
     fs.mkdirSync(CFG_DIR, { recursive: true });
     fs.writeFileSync(pidPath(), String(child.pid));
-    console.log(chalk.green(`代理已启动 (PID=${child.pid}): http://${host}:${port}`));
+    // 等 2 秒确认进程没挂
+    setTimeout(() => {
+      try { process.kill(child.pid, 0); } catch {
+        fs.unlinkSync(pidPath());
+        console.error(chalk.red("代理启动后异常退出，请检查端口是否被占用"));
+        return;
+      }
+      console.log(chalk.green(`代理已启动 (PID=${child.pid}): http://${host}:${port}`));
+    }, 2000);
   });
   child.on("error", (err) => {
     if (!started && err.code === "ENOENT" && onNotFound) {
