@@ -12,6 +12,25 @@ function pidPath() {
   return path.join(CFG_DIR, "proxy.pid");
 }
 
+function _spawn(cmd, args, host, port, onNotFound) {
+  const child = spawn(cmd, args, { detached: true, stdio: "ignore" });
+  let started = false;
+  child.on("spawn", () => {
+    started = true;
+    fs.mkdirSync(CFG_DIR, { recursive: true });
+    fs.writeFileSync(pidPath(), String(child.pid));
+    console.log(chalk.green(`代理已启动 (PID=${child.pid}): http://${host}:${port}`));
+  });
+  child.on("error", (err) => {
+    if (!started && err.code === "ENOENT" && onNotFound) {
+      onNotFound();
+    } else if (!started) {
+      console.error(chalk.red(`启动代理失败: ${err.message}`));
+    }
+  });
+  child.unref();
+}
+
 export async function proxyStart(opts = {}) {
   const cfg = getConfig();
   const host = opts.host || cfg.proxy_host;
@@ -33,33 +52,9 @@ export async function proxyStart(opts = {}) {
   if (port) args.push("--port", String(port));
 
   // 尝试 ipd-emcad-agent，找不到则用 python3 -m 兜底
-  let child;
-  try {
-    child = spawn("ipd-emcad-agent", args, {
-      detached: true,
-      stdio: "ignore",
-    });
-  } catch {
-    child = spawn("python3", ["-m", "ipd_emcad_agent.main", ...args], {
-      detached: true,
-      stdio: "ignore",
-    });
-  }
-
-  let started = false;
-  child.on("spawn", () => {
-    started = true;
-    fs.mkdirSync(CFG_DIR, { recursive: true });
-    fs.writeFileSync(pidPath(), String(child.pid));
-    console.log(chalk.green(`代理已启动 (PID=${child.pid}): http://${host}:${port}`));
+  _spawn("ipd-emcad-agent", args, host, port, () => {
+    _spawn("python3", ["-m", "ipd_emcad_agent.main", ...args], host, port);
   });
-  child.on("error", (err) => {
-    if (!started) {
-      console.error(chalk.red(`启动代理失败: ${err.message}`));
-      console.error(chalk.yellow("请确认 ipd-emcad-agent 已安装: pip install ipd-emcad-agent"));
-    }
-  });
-  child.unref();
 }
 
 export function proxyStop() {
