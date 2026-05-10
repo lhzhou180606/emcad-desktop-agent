@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ipd-emcad-agent"
+version = "0.1.0"
+description = "IPD Emcad Agent - 本地代理服务，执行 Python 脚本"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.23.0",
+    "requests>=2.31.0",
+    "pydantic>=2.0.0",
+    "httpx>=0.24.0",
+]
+
+[project.scripts]
+ipd-emcad-agent = "ipd_emcad_agent.main:main"
+
+[tool.setuptools.packages.find]
+include = ["ipd_emcad_agent*"]
