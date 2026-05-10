@@ -31,16 +31,35 @@ export async function proxyStart(opts = {}) {
   const args = [];
   if (host) args.push("--host", host);
   if (port) args.push("--port", String(port));
-  const child = spawn("ipd-emcad-agent", args, {
-    detached: true,
-    stdio: "ignore",
+
+  // 尝试 ipd-emcad-agent，找不到则用 python3 -m 兜底
+  let child;
+  try {
+    child = spawn("ipd-emcad-agent", args, {
+      detached: true,
+      stdio: "ignore",
+    });
+  } catch {
+    child = spawn("python3", ["-m", "ipd_emcad_agent.main", ...args], {
+      detached: true,
+      stdio: "ignore",
+    });
+  }
+
+  let started = false;
+  child.on("spawn", () => {
+    started = true;
+    fs.mkdirSync(CFG_DIR, { recursive: true });
+    fs.writeFileSync(pidPath(), String(child.pid));
+    console.log(chalk.green(`代理已启动 (PID=${child.pid}): http://${host}:${port}`));
+  });
+  child.on("error", (err) => {
+    if (!started) {
+      console.error(chalk.red(`启动代理失败: ${err.message}`));
+      console.error(chalk.yellow("请确认 ipd-emcad-agent 已安装: pip install ipd-emcad-agent"));
+    }
   });
   child.unref();
-
-  fs.mkdirSync(CFG_DIR, { recursive: true });
-  fs.writeFileSync(pidPath(), String(child.pid));
-
-  console.log(chalk.green(`代理已启动 (PID=${child.pid}): http://${host}:${port}`));
 }
 
 export function proxyStop() {
