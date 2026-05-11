@@ -1,11 +1,11 @@
-{
-  "name": "ipd-emcad",
+﻿{
+  "name": "ipd-cadtool",
   "version": "0.1.0",
   "private": true,
-  "description": "IPD Emcad — 脚本执行代理，统一入口",
+  "description": "IPD Cadtool — 脚本执行代理，统一入口",
   "scripts": {
     "server:install": "cd server && pip install -e .",
-    "server:start": "cd server && ipd-emcad-agent --host 0.0.0.0 --port 9527",
+    "server:start": "cd server && ipd-cadtool-agent --host 0.0.0.0 --port 9527",
     "server:build": "cd server && python build.py",
     "server:build:win": "cd server && build.bat",
     "client:install": "cd client && npm install",

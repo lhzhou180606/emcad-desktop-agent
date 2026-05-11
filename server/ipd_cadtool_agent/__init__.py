@@ -1,1 +1,1 @@
-"""ipd-emcad-agent - 本地代理服务"""
+﻿"""ipd-cadtool-agent - 本地代理服务"""

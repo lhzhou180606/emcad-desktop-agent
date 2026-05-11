@@ -1,13 +1,13 @@
-import fs from "node:fs";
+﻿import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import chalk from "chalk";
 
-const CONFIG_DIR = path.join(os.homedir(), ".ipd-emcad-cli");
+const CONFIG_DIR = path.join(os.homedir(), ".ipd-cadtool-cli");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
 function envOverride(key, value) {
-  const envKey = `EMCAD_${key.toUpperCase()}`;
+  const envKey = `CADTOOL_${key.toUpperCase()}`;
   const envVal = process.env[envKey];
   return envVal !== undefined ? envVal : value;
 }

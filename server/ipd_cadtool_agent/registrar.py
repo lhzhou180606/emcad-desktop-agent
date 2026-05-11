@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import threading
 import time
@@ -6,8 +6,8 @@ import logging
 
 import requests
 
-from ipd_emcad_agent.config import get_config
-from ipd_emcad_agent.models import AgentInfo, HeartbeatRequest, RegisterRequest, RegisterResponse
+from ipd_cadtool_agent.config import get_config
+from ipd_cadtool_agent.models import AgentInfo, HeartbeatRequest, RegisterRequest, RegisterResponse
 
 logger = logging.getLogger(__name__)
 

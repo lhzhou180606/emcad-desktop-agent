@@ -1,11 +1,11 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import subprocess
 import tempfile
 import time
 from pathlib import Path
 
-from ipd_emcad_agent.models import TaskRequest, TaskResult
+from ipd_cadtool_agent.models import TaskRequest, TaskResult
 
 
 class ScriptExecutor:
@@ -58,7 +58,7 @@ class ScriptExecutor:
         return result
 
     def _write_temp_script(self, content: str) -> str:
-        fd, path = tempfile.mkstemp(suffix=".py", prefix="ipd_emcad_script_")
+        fd, path = tempfile.mkstemp(suffix=".py", prefix="ipd_cadtool_script_")
         with open(fd, "w") as f:
             f.write(content)
         return path

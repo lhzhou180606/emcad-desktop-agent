@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+﻿import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -6,7 +6,7 @@ import chalk from "chalk";
 import { getConfig, setConfig } from "./config.js";
 import { healthCheck, getStatus } from "../api.js";
 
-const CFG_DIR = path.join(os.homedir(), ".ipd-emcad-cli");
+const CFG_DIR = path.join(os.homedir(), ".ipd-cadtool-cli");
 
 function pidPath() {
   return path.join(CFG_DIR, "proxy.pid");
@@ -59,9 +59,9 @@ export async function proxyStart(opts = {}) {
   if (host) args.push("--host", host);
   if (port) args.push("--port", String(port));
 
-  // 尝试 ipd-emcad-agent，找不到则用 python3 -m 兜底
-  _spawn("ipd-emcad-agent", args, host, port, () => {
-    _spawn("python3", ["-m", "ipd_emcad_agent.main", ...args], host, port);
+  // 尝试 ipd-cadtool-agent，找不到则用 python3 -m 兜底
+  _spawn("ipd-cadtool-agent", args, host, port, () => {
+    _spawn("python3", ["-m", "ipd_cadtool_agent.main", ...args], host, port);
   });
 }
 

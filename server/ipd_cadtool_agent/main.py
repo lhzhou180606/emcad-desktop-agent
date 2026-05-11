@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-"""ipd-emcad-agent 入口 - 启动本地代理服务"""
+﻿#!/usr/bin/env python3
+"""ipd-cadtool-agent 入口 - 启动本地代理服务"""
 
 from __future__ import annotations
 
@@ -9,13 +9,13 @@ import sys
 
 import uvicorn
 
-from ipd_emcad_agent.config import get_config
-from ipd_emcad_agent.registrar import registrar
-from ipd_emcad_agent.task_puller import puller
+from ipd_cadtool_agent.config import get_config
+from ipd_cadtool_agent.registrar import registrar
+from ipd_cadtool_agent.task_puller import puller
 
 
 def main():
-    parser = argparse.ArgumentParser(description="IPD Emcad Agent 本地代理服务")
+    parser = argparse.ArgumentParser(description="IPD Cadtool Agent 本地代理服务")
     parser.add_argument("--host", default="", help="监听地址 (默认 0.0.0.0)")
     parser.add_argument("--port", type=int, default=0, help="监听端口 (默认 9527)")
     parser.add_argument("--server", default="", help="远程服务端地址")
@@ -60,7 +60,7 @@ def main():
             puller.start()
             logging.info("任务拉取已启动")
 
-    from ipd_emcad_agent.server import app
+    from ipd_cadtool_agent.server import app
     logging.info("代理服务启动: %s:%s", host, port)
     uvicorn.run(app, host=host, port=port, log_level="info")
 

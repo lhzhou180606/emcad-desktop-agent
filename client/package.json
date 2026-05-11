@@ -1,16 +1,16 @@
-{
-  "name": "ipd-emcad-cli",
+﻿{
+  "name": "ipd-cadtool-cli",
   "version": "0.1.0",
-  "description": "IPD Emcad CLI - 本地代理系统客户端",
+  "description": "IPD Cadtool CLI - 本地代理系统客户端",
   "type": "module",
   "bin": {
-    "ipd-emcad-cli": "./bin/ipd-emcad-cli.js"
+    "ipd-cadtool-cli": "./bin/ipd-cadtool-cli.js"
   },
   "scripts": {
     "build": "node esbuild.config.mjs",
     "prepack": "node esbuild.config.mjs",
     "dev": "node src/cli.js",
-    "start": "node dist/ipd-emcad-cli.cjs"
+    "start": "node dist/ipd-cadtool-cli.cjs"
   },
   "dependencies": {
     "axios": "^1.7.0",

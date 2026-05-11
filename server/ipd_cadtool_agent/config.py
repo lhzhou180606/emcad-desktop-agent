@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 import os
@@ -11,7 +11,7 @@ class Config:
     """全局配置管理，支持配置文件 + 环境变量覆盖"""
 
     def __init__(self) -> None:
-        self._config_dir = Path.home() / ".ipd-emcad-cli"
+        self._config_dir = Path.home() / ".ipd-cadtool-cli"
         self._config_file = self._config_dir / "config.json"
         self._data: dict = {}
         self._load()
@@ -66,7 +66,7 @@ class Config:
             return "127.0.0.1"
 
     def _get(self, key: str, default: str) -> str:
-        env_key = f"EMCAD_{key.upper()}"
+        env_key = f"CADTOOL_{key.upper()}"
         env_val = os.environ.get(env_key)
         if env_val is not None:
             return env_val

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 import { program } from "commander";
 import chalk from "chalk";
 import { proxyStart, proxyStop, proxyStatus } from "./commands/proxy.js";
@@ -6,8 +6,8 @@ import { scriptRun, scriptList } from "./commands/script.js";
 import { configShow, configSet } from "./commands/config.js";
 
 program
-  .name("ipd-emcad-cli")
-  .description("IPD Emcad CLI")
+  .name("ipd-cadtool-cli")
+  .description("IPD Cadtool CLI")
   .version("0.1.0");
 
 // ── proxy ────────────────────────────────────────────

@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-"""PyInstaller 打包脚本 — 将 ipd-emcad-agent 打包为独立可执行文件
+﻿#!/usr/bin/env python3
+"""PyInstaller 打包脚本 — 将 ipd-cadtool-agent 打包为独立可执行文件
 
 用法:
     python build.py           # 打包当前平台
@@ -16,8 +16,8 @@ def build():
 
     cmd = [
         "pyinstaller",
-        "--name", "ipd-emcad-agent",
-        "--add-data", f"ipd_emcad_agent:ipd_emcad_agent",
+        "--name", "ipd-cadtool-agent",
+        "--add-data", f"ipd_cadtool_agent:ipd_cadtool_agent",
     ]
 
     if onefile:
@@ -28,7 +28,7 @@ def build():
     cmd.extend([
         "--clean",
         "--noconfirm",
-        "ipd_emcad_agent/main.py",
+        "ipd_cadtool_agent/main.py",
     ])
 
     print(f"Running: {' '.join(cmd)}")
@@ -36,9 +36,9 @@ def build():
 
     dist = Path("dist")
     if onefile:
-        print(f"\n打包完成: {dist / 'ipd-emcad-agent'}")
+        print(f"\n打包完成: {dist / 'ipd-cadtool-agent'}")
     else:
-        print(f"\n打包完成: {dist / 'ipd-emcad-agent' / 'ipd-emcad-agent'}")
+        print(f"\n打包完成: {dist / 'ipd-cadtool-agent' / 'ipd-cadtool-agent'}")
 
 
 if __name__ == "__main__":

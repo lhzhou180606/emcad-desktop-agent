@@ -1,2 +1,2 @@
-#!/usr/bin/env node
-import "../dist/ipd-emcad-cli.cjs";
+﻿#!/usr/bin/env node
+import "../dist/ipd-cadtool-cli.cjs";

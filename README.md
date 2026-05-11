@@ -1,4 +1,4 @@
-# IPD Emcad
+﻿# IPD Cadtool
 
 脚本执行代理 — agent 跑在本地执行机上，远程通过 CLI 或 HTTP 调用，执行 Python 脚本并返回结果。
 
@@ -6,7 +6,7 @@
 
 ```
 server/                  # Python 代理服务 (FastAPI)，跑在本地执行机
-├── ipd_emcad_agent/     # 源码
+├── ipd_cadtool_agent/     # 源码
 └── scripts/             # 示例脚本
 
 client/                  # Node.js CLI 工具 (Commander.js)，远程调用
@@ -22,7 +22,7 @@ client/                  # Node.js CLI 工具 (Commander.js)，远程调用
 ```bash
 cd server
 pip install -e .
-ipd-emcad-agent --host 0.0.0.0 --port 9527
+ipd-cadtool-agent --host 0.0.0.0 --port 9527
 ```
 
 ### 远程（调用方）— 安装 CLI
@@ -38,8 +38,8 @@ npm link
 
 ```bash
 # 远程 CLI 调用本地 agent
-ipd-emcad-cli config set proxy_host <本地IP>
-ipd-emcad-cli script run demo.py --arg 1 2 3 --env KEY=VAL
+ipd-cadtool-cli config set proxy_host <本地IP>
+ipd-cadtool-cli script run demo.py --arg 1 2 3 --env KEY=VAL
 
 # 或 HTTP 直接调用
 curl -X POST http://<本地IP>:9527/execute \
@@ -50,7 +50,7 @@ curl -X POST http://<本地IP>:9527/execute \
 ## CLI 命令
 
 ```
-ipd-emcad-cli [命令]
+ipd-cadtool-cli [命令]
 
 命令:
   script run <脚本>         执行 Python 脚本
@@ -124,13 +124,13 @@ agent 启动后暴露以下接口（默认 `http://0.0.0.0:9527`）：
 ## 打包
 
 ```bash
-cd client && npm run build          # esbuild → dist/ipd-emcad-cli.cjs
-cd server && python build.py        # PyInstaller → dist/ipd-emcad-agent/
+cd client && npm run build          # esbuild → dist/ipd-cadtool-cli.cjs
+cd server && python build.py        # PyInstaller → dist/ipd-cadtool-agent/
 ```
 
 ## 配置
 
-配置文件 `~/.ipd-emcad-cli/config.json`，环境变量 `EMCAD_<KEY>` 可覆盖：
+配置文件 `~/.ipd-cadtool-cli/config.json`，环境变量 `CADTOOL_<KEY>` 可覆盖：
 
 | 配置项 | 默认值 | 说明 |
 |--------|--------|------|

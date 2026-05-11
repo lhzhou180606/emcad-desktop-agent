@@ -1,4 +1,4 @@
-import fs from "node:fs";
+﻿import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import chalk from "chalk";
@@ -38,7 +38,7 @@ export async function scriptRun(scriptPathOrContent, opts = {}) {
 export function scriptList() {
   const tmpDir = os.tmpdir();
   try {
-    const files = fs.readdirSync(tmpDir).filter(f => f.startsWith("ipd_emcad_script_") && f.endsWith(".py"));
+    const files = fs.readdirSync(tmpDir).filter(f => f.startsWith("ipd_cadtool_script_") && f.endsWith(".py"));
     if (files.length) {
       console.log("临时脚本文件:");
       files.forEach(f => console.log(`  ${path.join(tmpDir, f)}`));

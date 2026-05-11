@@ -1,19 +1,19 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import logging
 
 from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel
 
-from ipd_emcad_agent.config import get_config
-from ipd_emcad_agent.models import TaskRequest
-from ipd_emcad_agent.executor import executor
-from ipd_emcad_agent.registrar import registrar
-from ipd_emcad_agent.task_puller import puller
+from ipd_cadtool_agent.config import get_config
+from ipd_cadtool_agent.models import TaskRequest
+from ipd_cadtool_agent.executor import executor
+from ipd_cadtool_agent.registrar import registrar
+from ipd_cadtool_agent.task_puller import puller
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="IPD Emcad Agent", version="0.1.0")
+app = FastAPI(title="IPD Cadtool Agent", version="0.1.0")
 _config = get_config()
 
 
