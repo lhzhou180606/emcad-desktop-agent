@@ -29,7 +29,8 @@ ipd-emcad-agent --host 0.0.0.0 --port 9527
 
 ```bash
 cd client
-npm run build
+
+
 npm link
 ```
 
